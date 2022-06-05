@@ -65,6 +65,7 @@ public class IngredientList {
     public boolean contains(Component component) {
         return contains(new Ingredient(component));
     }
+    
     public boolean contains(Ingredient ingredient) {
         return mapping.containsKey(ingredient.getComponentName());
     }

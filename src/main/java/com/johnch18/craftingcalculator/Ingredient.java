@@ -52,7 +52,7 @@ public class Ingredient {
         // TODO: Implement metadata handling
         // if (metadataString != null) metadata = Integer.parseInt(metadataString);
         //
-        setComponent(Component.createComponent(name, isFluid));
+        setComponent(Component.getComponent(name, isFluid));
         setAmount(amount);
         setChance(chance);
         // setMetadata(metadata);
@@ -71,7 +71,7 @@ public class Ingredient {
         if (ingredientString.contains(":"))
             initializeFromString(ingredientString);
         else
-            setComponent(Component.createComponent(ingredientString));
+            setComponent(Component.getComponent(ingredientString));
     }
 
     public Ingredient(Component component) {

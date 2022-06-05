@@ -25,11 +25,11 @@ public class Component {
      * */
 
 
-    public static Component createComponent(String ingredientString) {
-        return createComponent(ingredientString, false);
+    public static Component getComponent(String ingredientString) {
+        return getComponent(ingredientString, false);
     }
 
-    public static Component createComponent(String name, boolean isFluid) {
+    public static Component getComponent(String name, boolean isFluid) {
         /*
         * Factory method to control construction
         * */

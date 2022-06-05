@@ -4,7 +4,6 @@ import com.johnch18.craftingcalculator.exceptions.CCInvalidIngredientString;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class RecipeBook {
 
@@ -32,7 +31,7 @@ public class RecipeBook {
 
 
     public List<Recipe> getRecipesByOutput(String component) {
-        return getRecipesByOutput(Component.createComponent(component));
+        return getRecipesByOutput(Component.getComponent(component));
     }
 
     public List<Recipe> getRecipesByOutput(Component component) {

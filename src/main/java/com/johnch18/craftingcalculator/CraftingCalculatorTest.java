@@ -24,7 +24,7 @@ public class CraftingCalculatorTest {
                 new String[]{"netherStar"}
         );
         //
-        CostResult results = Component.createComponent("netherStar").getCostOf(64, new String[]{
+        CostResult results = Component.getComponent("netherStar").getCostOf(64, new String[]{
                 "netherStar"
         });
         display(results);
@@ -47,11 +47,8 @@ public class CraftingCalculatorTest {
                 new String[]{"woodPlank:2"}
         );
         //
-        Recipe woodPickaxeRecipe = recipeBook.getRecipesByOutput("woodenPickaxe").get(0);
-        System.out.println(woodPickaxeRecipe);
         //
-        Component test = Component.createComponent("woodenPickaxe");
-        CostResult result = test.getCostOf(4, new IngredientList());
+        CostResult result = Component.getComponent("woodenPickaxe").getCostOf(4, new IngredientList());
         display(result);
     }
 
