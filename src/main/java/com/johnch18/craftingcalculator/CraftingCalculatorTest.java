@@ -63,19 +63,21 @@ public class CraftingCalculatorTest {
         }
         System.out.println("Leftovers:");
         for (Map.Entry<String, Ingredient> entry : result.getExcess().getIterator()) {
-            if (entry.getValue().isValid()){
+            if (entry.getValue().isValid()) {
                 System.out.print('\t');
                 System.out.println(entry.getValue().toStringFancy());
             }
         }
     }
 
-    public static void replTest() {
+    public static void replTest() throws FileNotFoundException {
         RecipeREPL repl = new RecipeREPL("test.json");
         repl.repl();
     }
 
-    public static void main(String[] args) throws CCInvalidIngredientString, CCRecursionException, CCNullPtrException, IOException {
+    public static void main(
+            String[] args
+    ) throws CCInvalidIngredientString, CCRecursionException, CCNullPtrException, IOException {
         replTest();
     }
 

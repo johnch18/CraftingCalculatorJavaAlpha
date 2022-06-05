@@ -21,28 +21,10 @@ public class RecipeBook {
     private final List<Recipe> recipes;
     private boolean isDirty;
 
-    private static String readFile(String fileName) throws IOException {
-        String everything;
-        BufferedReader br = new BufferedReader(new FileReader(fileName));
-        try {
-            StringBuilder sb = new StringBuilder();
-            String line = br.readLine();
-
-            while (line != null) {
-                sb.append(line);
-                sb.append(System.lineSeparator());
-                line = br.readLine();
-            }
-            return sb.toString();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return "{}";
-    }
-
     public static RecipeBook loadBookFromFile(String fileName) throws IOException, CCInvalidIngredientString {
         RecipeBook result = new RecipeBook();
-        JSONObject object = new JSONObject(readFile(fileName));
+        String content = Utility.readFile(fileName);
+        JSONObject object = new JSONObject(content);
         loadComponents(result, object);
         loadRecipes(result, object);
         return result;

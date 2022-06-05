@@ -3,6 +3,7 @@ package com.johnch18.craftingcalculator.repl;
 import com.johnch18.craftingcalculator.RecipeBook;
 import com.johnch18.craftingcalculator.exceptions.CCExceptionNonCritical;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -21,7 +22,7 @@ public class RecipeREPL {
      * Methods
      * */
 
-    public RecipeREPL(String fileName) {
+    public RecipeREPL(String fileName) throws FileNotFoundException {
         setFileName(fileName);
         setRunning(true);
         loadCommands();
@@ -33,9 +34,10 @@ public class RecipeREPL {
         commands.put(command.hook(), command);
     }
 
-    public void loadCommands() {
+    public void loadCommands() throws FileNotFoundException {
         addCommand(new CommandExit());
         addCommand(new CommandHelp());
+        addCommand(new CommandManual());
     }
 
     public void loadBookFromFile() {

@@ -1,6 +1,17 @@
 package com.johnch18.craftingcalculator.repl;
 
+import com.johnch18.craftingcalculator.Utility;
+
+import java.io.FileNotFoundException;
+
 public class CommandManual implements Command {
+
+    public static final String manualPath = "./src/main/resources/manual.md";
+    public final String manualText = Utility.readFile(manualPath);
+
+    public CommandManual() throws FileNotFoundException {
+    }
+
 
     @Override
     public String hook() {
@@ -14,7 +25,7 @@ public class CommandManual implements Command {
 
     @Override
     public void execute(RecipeREPL repl, String[] args) {
-
+        repl.getDialog().printf("%s\n", manualText);
     }
 
 }
