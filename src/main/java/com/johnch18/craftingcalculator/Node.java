@@ -42,7 +42,7 @@ public class Node {
         if (recipe == null || !recipe.isEnabled())
             return;
         //
-        recipe.subtractFromCache(ingredient, cache);
+        RecipeAlgorithm.subtractFromCache(ingredient, cache);
         if (ingredient.getAmount() <= 0)
             return;
         //
@@ -50,8 +50,8 @@ public class Node {
         if (targetIngredient == null)
             return;
         //
-        int numberOfCrafts = recipe.calculateNumberOfCrafts(ingredient, targetIngredient);
-        recipe.factorInOutputs(ingredient, numberOfCrafts, cache);
+        int numberOfCrafts = RecipeAlgorithm.calculateNumberOfCrafts(ingredient, targetIngredient);
+        RecipeAlgorithm.factorInOutputs(recipe, ingredient, numberOfCrafts, cache);
         //
         for (Map.Entry<String, Ingredient> entry: recipe.getInputs().getIterator()) {
             Ingredient modified = entry.getValue().multiply(numberOfCrafts);

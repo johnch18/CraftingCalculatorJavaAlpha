@@ -183,13 +183,11 @@ public class Ingredient {
     public String toStringFancy() {
         StringBuilder sb = new StringBuilder();
         if (amount > 0) {
-            if (amount != 1 || component.isFluid()) {
-                sb.append(amount);
-                if (component.isFluid()) {
-                    sb.append("L ");
-                } else {
-                    sb.append("x ");
-                }
+            sb.append(amount);
+            if (component.isFluid()) {
+                sb.append("L ");
+            } else {
+                sb.append("x ");
             }
             sb.append(getComponent().getFancyName());
         }

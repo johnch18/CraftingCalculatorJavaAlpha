@@ -12,8 +12,6 @@ import static java.lang.Math.ceil;
 import static java.lang.Math.min;
 
 public class Recipe {
-
-    public static final int maxRecursionDepth = 5000;
     //
     private final IngredientList inputs;
     private final IngredientList outputs;
@@ -52,90 +50,6 @@ public class Recipe {
         return node;
     }
 
-    private void getCostRecursive(Ingredient target,
-                                  CostResult result) throws CCRecursionException, CCNullPtrException {
-        getCostRecursive(target, result.getCost(), result.getExcess(), 0);
-    }
-
-    private void getCostRecursive(
-            Ingredient initialIngredient,
-            IngredientList inputList,
-            IngredientList cache,
-            int depth
-    ) throws CCRecursionException, CCNullPtrException {
-        if (depth > maxRecursionDepth)
-            throw new CCRecursionException("Maximum Recursion Depth reached.");
-        //
-        Ingredient targetIngredient = getOutputIngredient(initialIngredient);
-        if (targetIngredient == null)
-            throw new CCNullPtrException("Invalid targetIngredient");
-        // Factor in items in the cache
-        subtractFromCache(initialIngredient, cache);
-        // If request already satisfied, skip
-        if (initialIngredient.getAmount() <= 0)
-            return;
-        // Calculate number of crafts needed
-        int numberOfCrafts = calculateNumberOfCrafts(initialIngredient, targetIngredient);
-        // Deal with excess outputs, add them to cache
-        factorInOutputs(initialIngredient, numberOfCrafts, cache);
-        // Do recursion
-        doRecursiveStep(numberOfCrafts, inputList, cache, depth);
-    }
-
-    public void doRecursiveStep(
-            int numberOfCrafts,
-            IngredientList inputList,
-            IngredientList cache,
-            int depth
-    ) throws CCRecursionException, CCNullPtrException {
-        for (Map.Entry<String, Ingredient> entry : inputs.getIterator()) {
-            // Get the new target ingredient, component, and recipe
-            Ingredient newInputIngredient = entry.getValue().multiply(numberOfCrafts);
-            Component component = newInputIngredient.getComponent();
-            Recipe recipe = component.getActiveRecipe();
-            if (recipe == null || !recipe.isEnabled()) {
-                // Skip if recipe is not valid
-                inputList.addIngredient(newInputIngredient);
-            } else {
-                // Recurse otherwise
-                recipe.getCostRecursive(newInputIngredient, inputList, cache, depth + 1);
-            }
-        }
-    }
-
-    public void factorInOutputs(Ingredient initialIngredient, int numberOfCrafts, IngredientList cache) {
-        for (Map.Entry<String, Ingredient> entry : outputs.getIterator()) {
-            Ingredient scaledOutput = entry.getValue().multiply(numberOfCrafts);
-            if (!scaledOutput.isSameAs(initialIngredient))
-                cache.addIngredient(scaledOutput);
-            else {
-                int delta = scaledOutput.getAmount() - initialIngredient.getAmount();
-                if (delta > 0)
-                    cache.addIngredient(new Ingredient(scaledOutput.getComponent(), delta));
-            }
-        }
-    }
-
-    public int calculateNumberOfCrafts(Ingredient initialIngredient, Ingredient targetIngredient) {
-        double amount = targetIngredient.getAmount();
-        double chance = targetIngredient.getChance();
-        double factor = amount * chance;
-        return (int) ceil(initialIngredient.getAmount() / factor);
-    }
-
-    public void subtractFromCache(Ingredient targetIngredient, IngredientList cache) {
-        // Factor in already provided items
-        for (Map.Entry<String, Ingredient> element : cache.getIterator()) {
-            Ingredient cacheIngredient = element.getValue();
-            // If matching ingredient found, subtract
-            if (cacheIngredient.isSameAs(targetIngredient)) {
-                int n = min(targetIngredient.getAmount(), cacheIngredient.getAmount());
-                targetIngredient.subInPlace(n);
-                cacheIngredient.subInPlace(n);
-            }
-        }
-    }
-
     public Ingredient getOutputIngredient(Ingredient ingredient) {
         String name = ingredient.getComponent().getName();
         return outputs.getMapping().get(name);
@@ -167,7 +81,7 @@ public class Recipe {
     ) throws CCRecursionException, CCNullPtrException {
         CostResult result = new CostResult();
         result.getExcess().combineWith(preCache);
-        getCostRecursive(target, result);
+        RecipeAlgorithm.getCostRecursive(this, target, result);
         return result;
     }
 

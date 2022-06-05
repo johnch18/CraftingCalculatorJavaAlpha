@@ -38,7 +38,7 @@ public class CraftingCalculatorTest {
         CostResult results = Component.getComponent("netherStar").getCostOf(64, new String[]{
                 "netherStar"
         });
-        // display(results);
+        display(results);
         //
         recipeBook.dumpBookToFile("./test.json");
     }
@@ -78,13 +78,17 @@ public class CraftingCalculatorTest {
     private static void display(CostResult result) {
         System.out.println("Inputs:");
         for (Map.Entry<String, Ingredient> entry : result.getCost().getIterator()) {
-            System.out.print('\t');
-            System.out.println(entry.getValue().toString());
+            if (entry.getValue().isValid()) {
+                System.out.print('\t');
+                System.out.println(entry.getValue().toStringFancy());
+            }
         }
         System.out.println("Leftovers:");
         for (Map.Entry<String, Ingredient> entry : result.getExcess().getIterator()) {
-            System.out.print('\t');
-            System.out.println(entry.getValue().toString());
+            if (entry.getValue().isValid()){
+                System.out.print('\t');
+                System.out.println(entry.getValue().toStringFancy());
+            }
         }
     }
 
@@ -93,8 +97,8 @@ public class CraftingCalculatorTest {
         repl.repl();
     }
 
-    public static void main(String[] args) {
-        replTest();
+    public static void main(String[] args) throws CCInvalidIngredientString, CCRecursionException, CCNullPtrException, FileNotFoundException {
+        test_recursion();
     }
 
 }
