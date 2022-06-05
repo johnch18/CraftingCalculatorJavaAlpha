@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Scanner;
 
 public class RecipeREPL {
 
@@ -44,6 +43,8 @@ public class RecipeREPL {
         addCommand(new CommandListRecipes());
         addCommand(new CommandAddComponent());
         addCommand(new CommandAddRecipe());
+        addCommand(new CommandCost());
+        addCommand(new CommandTree());
     }
 
     public void loadBookFromFile() {

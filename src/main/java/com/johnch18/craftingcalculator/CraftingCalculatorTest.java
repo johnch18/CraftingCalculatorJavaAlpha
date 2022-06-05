@@ -18,25 +18,9 @@ public class CraftingCalculatorTest {
 
     public static void testTree() throws CCInvalidIngredientString, IOException, CCRecursionException, CCNullPtrException {
         RecipeBook book = RecipeBook.loadBookFromFile("./test.json");
-        Node root = Component.getComponent("netherStar").getActiveRecipe().getTree(new Ingredient("netherStar:64"));
+        // Node root = Component.getComponent("netherStar").getActiveRecipe().getTree(new Ingredient("netherStar:64"));
+        Node root = (new Ingredient("netherStar:64")).getTree();
         System.out.println(root.render());
-    }
-
-    private static void display(CostResult result) {
-        System.out.println("Inputs:");
-        for (Map.Entry<String, Ingredient> entry : result.getCost().getIterator()) {
-            if (entry.getValue().isValid()) {
-                System.out.print('\t');
-                System.out.println(entry.getValue().toStringFancy());
-            }
-        }
-        System.out.println("Leftovers:");
-        for (Map.Entry<String, Ingredient> entry : result.getExcess().getIterator()) {
-            if (entry.getValue().isValid()) {
-                System.out.print('\t');
-                System.out.println(entry.getValue().toStringFancy());
-            }
-        }
     }
 
     public static void replTest() throws FileNotFoundException {

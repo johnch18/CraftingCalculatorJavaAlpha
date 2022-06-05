@@ -208,4 +208,8 @@ public class Ingredient {
         return getComponent().getCostOf(getAmount(), cache);
     }
 
+    public Node getTree() {
+        return getComponent().getActiveRecipe().getTree(this);
+    }
+
 }
