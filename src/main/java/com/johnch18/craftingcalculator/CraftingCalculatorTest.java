@@ -4,7 +4,6 @@ import com.johnch18.craftingcalculator.exceptions.CCInvalidIngredientString;
 import com.johnch18.craftingcalculator.exceptions.CCNullPtrException;
 import com.johnch18.craftingcalculator.exceptions.CCRecursionException;
 import com.johnch18.craftingcalculator.repl.RecipeREPL;
-import com.johnch18.craftingcalculator.tree.Node;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;

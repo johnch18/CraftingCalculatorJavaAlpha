@@ -1,9 +1,4 @@
-package com.johnch18.craftingcalculator.tree;
-
-import com.johnch18.craftingcalculator.Ingredient;
-import com.johnch18.craftingcalculator.IngredientList;
-import com.johnch18.craftingcalculator.Recipe;
-import com.johnch18.craftingcalculator.exceptions.CCNullPtrException;
+package com.johnch18.craftingcalculator;
 
 import java.util.ArrayList;
 import java.util.List;

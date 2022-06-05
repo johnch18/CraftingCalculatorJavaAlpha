@@ -3,12 +3,9 @@ package com.johnch18.craftingcalculator;
 import com.johnch18.craftingcalculator.exceptions.CCInvalidIngredientString;
 import com.johnch18.craftingcalculator.exceptions.CCNullPtrException;
 import com.johnch18.craftingcalculator.exceptions.CCRecursionException;
-import com.johnch18.craftingcalculator.tree.Node;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import static java.lang.Math.ceil;
