@@ -11,37 +11,6 @@ import java.util.Map;
 
 public class CraftingCalculatorTest {
 
-    public static void test_recursion() throws CCInvalidIngredientString, CCRecursionException, CCNullPtrException, IOException {
-        //
-        RecipeBook recipeBook = RecipeBook.loadBookFromFile("./test.json");
-        //
-        CostResult results = (new Ingredient("netherStar", 64)).getCost();
-        display(results);
-        //
-        recipeBook.dumpBookToFile("./test.json");
-    }
-
-    public static void test_simple() throws CCInvalidIngredientString, CCRecursionException, CCNullPtrException {
-        //
-        RecipeBook recipeBook = new RecipeBook();
-        recipeBook.addRecipe(
-                new String[]{"woodenPickaxe"},
-                new String[]{"woodPlank:3", "stick:2"}
-        );
-        recipeBook.addRecipe(
-                new String[]{"woodPlank:4"},
-                new String[]{"woodLog:1"}
-        );
-        recipeBook.addRecipe(
-                new String[]{"stick:4"},
-                new String[]{"woodPlank:2"}
-        );
-        //
-        //
-        CostResult result = Component.getComponent("woodenPickaxe").getCostOf(4, new IngredientList());
-        display(result);
-    }
-
     public static void loadBook() throws CCInvalidIngredientString, IOException {
         RecipeBook book = RecipeBook.loadBookFromFile("./test.json");
         book.dumpBookToFile("./test2.json");

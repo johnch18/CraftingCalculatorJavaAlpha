@@ -12,6 +12,7 @@ import static java.lang.Math.ceil;
 import static java.lang.Math.min;
 
 public class Recipe {
+
     //
     private final IngredientList inputs;
     private final IngredientList outputs;
@@ -38,10 +39,28 @@ public class Recipe {
 
     public Recipe(IngredientList outputs, IngredientList inputs) {
         this();
-        for (Map.Entry<String, Ingredient> entry: outputs.getIterator())
+        for (Map.Entry<String, Ingredient> entry : outputs.getIterator())
             addOutput(entry.getValue());
-        for (Map.Entry<String, Ingredient> entry: inputs.getIterator())
+        for (Map.Entry<String, Ingredient> entry : inputs.getIterator())
             addInput(entry.getValue());
+    }
+
+    public static Recipe deserialize(JSONObject object) throws CCInvalidIngredientString {
+        JSONArray outputList = object.optJSONArray("outputs");
+        JSONArray inputList = object.optJSONArray("inputs");
+        boolean enabled = object.optBoolean("enabled", true);
+        //
+        IngredientList outputs = new IngredientList();
+        IngredientList inputs = new IngredientList();
+        //
+        for (Object obj : outputList)
+            outputs.addIngredient(new Ingredient((String) obj));
+        for (Object obj : inputList)
+            inputs.addIngredient(new Ingredient((String) obj));
+        //
+        Recipe result = new Recipe(outputs, inputs);
+        result.setEnabled(enabled);
+        return result;
     }
 
     public Node getTree(Ingredient ingredient) {
@@ -106,32 +125,14 @@ public class Recipe {
         JSONArray outputList = new JSONArray();
         JSONArray inputList = new JSONArray();
         //
-        for (Map.Entry<String, Ingredient> entry: outputs.getIterator())
+        for (Map.Entry<String, Ingredient> entry : outputs.getIterator())
             outputList.put(entry.getValue().toString());
-        for (Map.Entry<String, Ingredient> entry: inputs.getIterator())
+        for (Map.Entry<String, Ingredient> entry : inputs.getIterator())
             inputList.put(entry.getValue().toString());
         //
         result.put("outputs", outputList);
         result.put("inputs", inputList);
         result.put("enabled", isEnabled());
-        return result;
-    }
-
-    public static Recipe deserialize(JSONObject object) throws CCInvalidIngredientString {
-        JSONArray outputList = object.optJSONArray("outputs");
-        JSONArray inputList = object.optJSONArray("inputs");
-        boolean enabled = object.optBoolean("enabled", true);
-        //
-        IngredientList outputs = new IngredientList();
-        IngredientList inputs = new IngredientList();
-        //
-        for (Object obj : outputList)
-            outputs.addIngredient(new Ingredient((String)obj));
-        for (Object obj : inputList)
-            inputs.addIngredient(new Ingredient((String)obj));
-        //
-        Recipe result = new Recipe(outputs, inputs);
-        result.setEnabled(enabled);
         return result;
     }
 
@@ -154,6 +155,20 @@ public class Recipe {
 
     public IngredientList getOutputs() {
         return outputs;
+    }
+
+    public String toStringFancy() {
+        StringBuilder sb = new StringBuilder();
+        for (Map.Entry<String, Ingredient> entry : inputs.getIterator()) {
+            sb.append(entry.getValue().toStringFancy());
+            sb.append("  ");
+        }
+        sb.append("->  ");
+        for (Map.Entry<String, Ingredient> entry : outputs.getIterator()) {
+            sb.append(entry.getValue().toStringFancy());
+            sb.append("  ");
+        }
+        return sb.toString();
     }
 
 }

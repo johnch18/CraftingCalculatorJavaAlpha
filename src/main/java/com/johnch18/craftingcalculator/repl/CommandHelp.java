@@ -28,7 +28,7 @@ public class CommandHelp implements Command {
 
     public String helpString() {
         // TODO:
-        return "";
+        return "Prints helpful information :)";
     }
 
 }

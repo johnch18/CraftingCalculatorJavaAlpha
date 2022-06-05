@@ -25,7 +25,7 @@ public class CommandExit implements Command {
     @Override
     public String helpString() {
         // TODO:
-        return "";
+        return "Exits from the program. Adding 'now' as an argument skips any saving dialogs.";
     }
 
 }

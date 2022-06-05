@@ -38,6 +38,12 @@ public class RecipeREPL {
         addCommand(new CommandExit());
         addCommand(new CommandHelp());
         addCommand(new CommandManual());
+        addCommand(new CommandSave());
+        addCommand(new CommandLoad());
+        addCommand(new CommandListComponents());
+        addCommand(new CommandListRecipes());
+        addCommand(new CommandAddComponent());
+        addCommand(new CommandAddRecipe());
     }
 
     public void loadBookFromFile() {
@@ -57,7 +63,8 @@ public class RecipeREPL {
     }
 
     public void repl() {
-        dialog.printf("Welcome to the crafting calculator CLI." +
+        dialog.printf("" + // IntelliJ t'ings
+                "Welcome to the crafting calculator CLI." +
                 " Please type 'help', 'help `command`', or 'manual' if you get stuck.\n");
         while (running) {
             String command = dialog.read();

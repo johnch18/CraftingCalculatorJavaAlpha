@@ -4,35 +4,47 @@ import com.johnch18.craftingcalculator.exceptions.CCInvalidIngredientString;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.*;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class RecipeBook {
 
     private static final String componentFieldName = "components";
-    private static final String componentNameFieldName = "name";
-    private static final String componentFluidFieldName = "isFluid";
     private static final String recipeFieldName = "recipes";
-    private static final String recipeInputFieldName = "inputs";
-    private static final String recipeOutputFieldName = "outputs";
-    private static final String recipeEnabledFieldName = "enabled";
 
     private final List<Recipe> recipes;
     private boolean isDirty;
 
-    public static RecipeBook loadBookFromFile(String fileName) throws IOException, CCInvalidIngredientString {
-        RecipeBook result = new RecipeBook();
-        String content = Utility.readFile(fileName);
-        JSONObject object = new JSONObject(content);
-        loadComponents(result, object);
-        loadRecipes(result, object);
-        return result;
+    public RecipeBook() {
+        setDirty(true);
+        recipes = new ArrayList<>();
     }
 
+    public static RecipeBook loadBookFromFile(String fileName) throws IOException, CCInvalidIngredientString {
+        RecipeBook result = new RecipeBook();
+        return loadBookFromFile(result, fileName);
+    }
+
+    public static RecipeBook loadBookFromFile(
+            RecipeBook recipeBook,
+            String fileName
+    ) throws FileNotFoundException, CCInvalidIngredientString {
+        String content = Utility.readFile(fileName);
+        assert content != null;
+        JSONObject object = new JSONObject(content);
+        loadComponents(recipeBook, object);
+        loadRecipes(recipeBook, object);
+        return recipeBook;
+    }
+
+
+
     private static void loadRecipes(RecipeBook result, JSONObject object) throws CCInvalidIngredientString {
-        for (Object temp: object.getJSONArray(recipeFieldName))
-            result.addRecipe(Recipe.deserialize((JSONObject)temp));
+        for (Object temp : object.getJSONArray(recipeFieldName))
+            result.addRecipe(Recipe.deserialize((JSONObject) temp));
     }
 
     private static void loadComponents(RecipeBook result, JSONObject object) {
@@ -49,7 +61,7 @@ public class RecipeBook {
         try (FileWriter writer = new FileWriter(fileName)) {
             writer.write(result);
         } catch (IOException e) {
-            e.printStackTrace();;
+            e.printStackTrace();
         }
         setDirty(false);
     }
@@ -66,11 +78,6 @@ public class RecipeBook {
         for (Component comp : Component.getComponents())
             compArray.put(comp.serialize());
         obj.put(componentFieldName, compArray);
-    }
-
-    public RecipeBook() {
-        setDirty(true);
-        recipes = new ArrayList<>();
     }
 
     public void addRecipe(Recipe recipe) {
@@ -110,8 +117,8 @@ public class RecipeBook {
     }
 
     /*
-    *   Getters and Setters
-    * */
+     *   Getters and Setters
+     * */
 
     public List<Recipe> getRecipes() {
         return recipes;
