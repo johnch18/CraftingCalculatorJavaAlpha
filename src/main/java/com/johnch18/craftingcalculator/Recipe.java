@@ -3,6 +3,7 @@ package com.johnch18.craftingcalculator;
 import com.johnch18.craftingcalculator.exceptions.CCInvalidIngredientString;
 import com.johnch18.craftingcalculator.exceptions.CCNullPtrException;
 import com.johnch18.craftingcalculator.exceptions.CCRecursionException;
+import com.johnch18.craftingcalculator.tree.Node;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -46,6 +47,12 @@ public class Recipe {
             addOutput(entry.getValue());
         for (Map.Entry<String, Ingredient> entry: inputs.getIterator())
             addInput(entry.getValue());
+    }
+
+    public Node getTree(Ingredient ingredient) {
+        Node node = new Node(ingredient);
+        node.generateChildren();
+        return node;
     }
 
     private void getCostRecursive(Ingredient target,
@@ -132,7 +139,7 @@ public class Recipe {
         }
     }
 
-    private Ingredient getOutputIngredient(Ingredient ingredient) {
+    public Ingredient getOutputIngredient(Ingredient ingredient) {
         String name = ingredient.getComponent().getName();
         return outputs.getMapping().get(name);
     }
