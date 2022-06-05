@@ -14,48 +14,64 @@ public class Component {
 
     // Stores all instances of Components
     private static final Map<String, Component> registry = new HashMap<>();
+    // List of recipes
+    private final List<Recipe> recipes;
     // Name of component
     private String name;
     // Whether it is a fluid
     private boolean isFluid;
-    // List of recipes
-    private final List<Recipe> recipes;
+    private String fancyName;
 
     /*
      * Construction / Destruction
      * */
-
-
-    public static Component getComponent(String ingredientString) {
-        return getComponent(ingredientString, false);
-    }
-
-    public static Component getComponent(String name, boolean isFluid) {
-        /*
-        * Factory method to control construction
-        * */
-        // Get recipe if it exists
-        if (registry.containsKey(name))
-            return registry.get(name);
-        // Create Recipe
-        Component result;
-        result = new Component(name, isFluid);
-        registry.put(name, result);
-        return result;
-    }
 
     private Component(String name) {
         this(name, false);
     }
 
     private Component(String name, boolean isFluid) {
+        this(name, isFluid, null);
+    }
+
+    private Component(String name, boolean isFluid, String fancyName) {
         setName(name);
         setFluid(isFluid);
+        this.fancyName = fancyName;
         recipes = new ArrayList<>();
+    }
+
+    public static Component getComponent(String ingredientString) {
+        return getComponent(ingredientString, false);
+    }
+
+    public static Component getComponent(String name, boolean isFluid) {
+        return getComponent(name, isFluid, name);
+    }
+
+    public static Component getComponent(String name, boolean isFluid, String fancyName) {
+        /*
+         * Factory method to control construction
+         * */
+        // Get recipe if it exists
+        if (registry.containsKey(name))
+            return registry.get(name);
+        // Create Recipe
+        Component result;
+        result = new Component(name, isFluid, fancyName);
+        registry.put(name, result);
+        return result;
     }
 
     public static Iterable<? extends Component> getComponents() {
         return registry.values();
+    }
+
+    public static Component deserialize(JSONObject object) {
+        String name = object.optString("name");
+        boolean isFluid = object.optBoolean("isFluid", false);
+        String fancyName = object.optString("fancyName", name);
+        return getComponent(name, isFluid, fancyName);
     }
 
     public void addRecipe(Recipe recipe) {
@@ -63,7 +79,7 @@ public class Component {
     }
 
     public Recipe getActiveRecipe() {
-        for (Recipe r: recipes) {
+        for (Recipe r : recipes) {
             if (r.isEnabled())
                 return r;
         }
@@ -93,13 +109,8 @@ public class Component {
         JSONObject result = new JSONObject();
         result.put("name", getName());
         result.put("isFluid", isFluid());
+        result.put("fancyName", getFancyName());
         return result;
-    }
-
-    public static Component deserialize(JSONObject object) {
-        String name = object.optString("name");
-        boolean isFluid = object.optBoolean("isFluid", false);
-        return getComponent(name, isFluid);
     }
 
     /*
@@ -124,6 +135,12 @@ public class Component {
 
     public List<Recipe> getRecipes() {
         return recipes;
+    }
+
+    public String getFancyName() {
+        if (fancyName != null)
+            return fancyName;
+        return getName();
     }
 
 }
