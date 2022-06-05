@@ -15,9 +15,7 @@ public class CraftingCalculatorTest {
         //
         RecipeBook recipeBook = RecipeBook.loadBookFromFile("./test.json");
         //
-        CostResult results = Component.getComponent("netherStar").getCostOf(64, new String[]{
-                "netherStar"
-        });
+        CostResult results = (new Ingredient("netherStar", 64)).getCost();
         display(results);
         //
         recipeBook.dumpBookToFile("./test.json");
