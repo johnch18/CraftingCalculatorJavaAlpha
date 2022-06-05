@@ -2,7 +2,7 @@
 
 ## Supports:
 
-- Recursive crafting
+- Recursive crafting (can't calculate catalysts though, but gets everything else right)
 - Multiple recipes (must manually select a recipe to use though, give me a break I'm not going to read your mind)
 - Chance outputs
 - Fluids
@@ -11,9 +11,39 @@
 ## Features I want:
 
 - Ability to rip recipes, item names, and icons from game
-- GUI and/or CLI to do crafting calculations
+- GUI  ~~and/or CLI to do crafting calculations~~
 - Minecraft version independence
 - Portability
+
+## Command Line Interface:
+
+Can be started using:
+```java
+class Test {
+    
+    public static void main(String[] args) {
+        RecipeREPL repl = new RecipeREPL("filename.json");
+        repl.repl();
+    }
+    
+}
+```
+
+The program can then be run and queried as so (use `help` or `manual` for more information):
+```
+> add-component glass false Glass
+> ls-components
+Glass ('glass')
+> add-recipe sand -> glass
+> ls-components
+Glass ('glass')
+sand ('sand')
+> ls-recipes
+1x sand -> 1x Glass
+> save test.json
+> exit
+```
+
 
 ## Example:
 
@@ -72,5 +102,5 @@ Which is correct.
 - Can only use one recipe per output, must select between them to do calculations.
 - Presently no metadata support
 - NBT support highly unlikely
-- No convenient interface
+- ~~No convenient interface~~ CLI is okay for now.
 - Not hooked into MC yet
