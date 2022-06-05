@@ -76,7 +76,7 @@ public class CraftingCalculatorTest {
     }
 
     public static void main(String[] args) throws CCInvalidIngredientString, CCRecursionException, CCNullPtrException, IOException {
-        test_recursion();
+        replTest();
     }
 
 }

@@ -12,7 +12,7 @@ import java.util.Scanner;
 public class RecipeREPL {
 
     public static final Map<String, Command> commands = new HashMap<>();
-    private final Scanner scanner;
+    private final REPLDialog dialog;
     private RecipeBook recipeBook;
     private String fileName;
     private boolean running;
@@ -25,17 +25,17 @@ public class RecipeREPL {
         setFileName(fileName);
         setRunning(true);
         loadCommands();
-        scanner = new Scanner(System.in);
+        dialog = new REPLDialog(this);
         loadBookFromFile();
+    }
+
+    private static void addCommand(Command command) {
+        commands.put(command.hook(), command);
     }
 
     public void loadCommands() {
         addCommand(new CommandExit());
         addCommand(new CommandHelp());
-    }
-
-    private static void addCommand(Command command) {
-        commands.put(command.hook(), command);
     }
 
     public void loadBookFromFile() {
@@ -46,18 +46,19 @@ public class RecipeREPL {
         try {
             recipeBook = RecipeBook.loadBookFromFile(fileName);
         } catch (IOException e) {
-            printf("Unable to open '%s'.", fileName);
+            dialog.printf("Unable to open '%s'.", fileName);
             e.printStackTrace();
         } catch (CCExceptionNonCritical e) {
-            printf("An error occurred\n");
+            dialog.printf("An error occurred\n");
             e.printStackTrace();
         }
     }
 
     public void repl() {
-        printf("Welcome to the crafting calculator CLI. Please type `help` or `help command` if you get stuck.\n");
+        dialog.printf("Welcome to the crafting calculator CLI." +
+                " Please type 'help', 'help `command`', or 'manual' if you get stuck.\n");
         while (running) {
-            String command = read();
+            String command = dialog.read();
             eval(command);
             // Print implicit
             // Loop implicit
@@ -73,29 +74,14 @@ public class RecipeREPL {
         if (commands.containsKey(command)) {
             commands.get(command).execute(this, args);
         } else {
-            printf("'%s' is not a valid command.\n");
+            dialog.printf("'%s' is not a valid command.\n");
         }
     }
 
     public void quit() {
         if (recipeBook.isDirty())
-            unsavedChangesDialog();
+            dialog.unsavedChangesDialog();
         exit();
-    }
-
-    public void unsavedChangesDialog() {
-        printf("You have unsaved changes, if you would like to save them" +
-                "enter the name of the file you would like to save to.\n");
-        printf("Alternatively, enter a blank line in order to not save.:");
-        save();
-    }
-
-    public void save() {
-        String fileName = read("");
-        if (!fileName.equals("")) {
-            saveBook(fileName);
-            printf("Successfully wrote out to '%s'.\n", fileName);
-        }
     }
 
     public void saveBook(String fileName) {
@@ -104,19 +90,6 @@ public class RecipeREPL {
 
     public void exit() {
         setRunning(false);
-    }
-
-    public String read() {
-        return read(">");
-    }
-
-    public String read(String prompt) {
-        printf("%s ", prompt);
-        return scanner.nextLine();
-    }
-
-    public void printf(String fmt, Object... objects) {
-        System.out.printf(fmt, objects);
     }
 
     /*
@@ -141,6 +114,10 @@ public class RecipeREPL {
 
     public Map<String, Command> getCommands() {
         return commands;
+    }
+
+    public REPLDialog getDialog() {
+        return dialog;
     }
 
 }

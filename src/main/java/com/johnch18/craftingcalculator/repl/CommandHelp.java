@@ -14,9 +14,9 @@ public class CommandHelp implements Command {
         } else {
             for (String com : args) {
                 if (commands.containsKey(com)) {
-                    repl.printf("%s:\n -- %s\n\n", com, commands.get(com).helpString());
+                    repl.getDialog().printf("%s:\n -- %s\n\n", com, commands.get(com).helpString());
                 } else {
-                    repl.printf("'%s' is not a valid command.\n", com);
+                    repl.getDialog().printf("'%s' is not a valid command.\n", com);
                 }
             }
         }

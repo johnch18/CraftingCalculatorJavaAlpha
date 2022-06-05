@@ -10,10 +10,10 @@ public class CommandExit implements Command {
             if (args[0].equals("now")) {
                 repl.exit();
             } else {
-                repl.printf("Invalid parameter for %s '%s'.\n", hook(), args[0]);
+                repl.getDialog().printf("Invalid parameter for %s '%s'.\n", hook(), args[0]);
             }
         } else {
-            repl.printf("Too many parameters to %s.\n", hook());
+            repl.getDialog().printf("Too many parameters to %s.\n", hook());
         }
     }
 
