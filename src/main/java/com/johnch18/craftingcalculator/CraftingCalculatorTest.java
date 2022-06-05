@@ -5,6 +5,7 @@ import com.johnch18.craftingcalculator.exceptions.CCNullPtrException;
 import com.johnch18.craftingcalculator.exceptions.CCRecursionException;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Map;
 
 public class CraftingCalculatorTest {
@@ -30,7 +31,7 @@ public class CraftingCalculatorTest {
         });
         display(results);
         //
-        recipeBook.dumpBookToFile("./test.rb");
+        recipeBook.dumpBookToFile("./test.json");
     }
 
     public static void test_simple() throws CCInvalidIngredientString, CCRecursionException, CCNullPtrException {
@@ -54,6 +55,11 @@ public class CraftingCalculatorTest {
         display(result);
     }
 
+    public static void loadBook() throws CCInvalidIngredientString, IOException {
+        RecipeBook book = RecipeBook.loadBookFromFile("./test.json");
+        book.dumpBookToFile("./test2.json");
+    }
+
     private static void display(CostResult result) {
         System.out.println("Inputs:");
         for (Map.Entry<String, Ingredient> entry : result.getCost().getIterator()) {
@@ -69,8 +75,8 @@ public class CraftingCalculatorTest {
 
     public static void main(
             String[] args
-    ) throws CCInvalidIngredientString, CCRecursionException, CCNullPtrException, FileNotFoundException {
-        test_recursion();
+    ) throws CCInvalidIngredientString, CCRecursionException, CCNullPtrException, IOException {
+        loadBook();
     }
 
 }

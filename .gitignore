@@ -7,4 +7,5 @@
 .project
 /bin/
 *~
-*.rb
+test.json
+test2.json

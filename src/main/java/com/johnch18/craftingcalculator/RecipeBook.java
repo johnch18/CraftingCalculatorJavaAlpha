@@ -63,8 +63,12 @@ public class RecipeBook {
         dumpComponents(obj);
         dumpRecipes(obj);
         String result = obj.toString();
-        PrintWriter out = new PrintWriter(fileName);
-        out.print(result);
+        try (FileWriter writer = new FileWriter(fileName)) {
+            writer.write(result);
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();;
+        }
     }
 
     private void dumpRecipes(JSONObject obj) {
