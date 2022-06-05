@@ -1,6 +1,7 @@
 package com.johnch18.craftingcalculator;
 
 import com.johnch18.craftingcalculator.exceptions.CCInvalidIngredientString;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -11,17 +12,33 @@ import java.util.List;
 
 public class RecipeBook {
 
-    private List<Recipe> recipes;
+    private static final String componentFieldName = "components";
+    private static final String componentNameFieldName = "name";
+    private static final String componentFluidFieldName = "isFluid";
+    private static final String recipeFieldName = "recipes";
+
+    private final List<Recipe> recipes;
 
     public static RecipeBook loadBookFromFile(String fileName) throws IOException {
         RecipeBook result = new RecipeBook();
         JSONObject object = new JSONObject(readFile(fileName));
         loadComponents(result, object);
+        loadRecipes(result, object);
         return result;
     }
 
+    private static void loadRecipes(RecipeBook result, JSONObject object) {
+        JSONArray recipeList = object.getJSONArray(recipeFieldName);
+    }
+
     private static void loadComponents(RecipeBook result, JSONObject object) {
-        JSONObject componentMap = (JSONObject) object.get("components");
+        JSONArray componentList = object.getJSONArray(componentFieldName);
+        for (int i = 0; i < componentList.length(); i++) {
+            JSONObject temp = componentList.getJSONObject(i);
+            String name = temp.getString(componentNameFieldName);
+            boolean isFluid = temp.getBoolean(componentFluidFieldName);
+            Component newComponent = Component.getComponent(name, isFluid);
+        }
     }
 
     private static String readFile(String fileName) throws IOException {
@@ -40,6 +57,7 @@ public class RecipeBook {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return "{}";
     }
 
     public RecipeBook() {
