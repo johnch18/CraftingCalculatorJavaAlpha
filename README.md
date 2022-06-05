@@ -65,3 +65,10 @@ Leftovers:
 	netherStar:1:1.0
 ```
 Which is correct.
+
+## Current Limitations
+- Can only use one recipe per output, must select between them to do calculations.
+- Presently no metadata support
+- NBT support highly unlikely
+- No convenient interface
+- Not hooked into MC yet
