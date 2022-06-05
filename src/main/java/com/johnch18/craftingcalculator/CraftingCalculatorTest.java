@@ -3,6 +3,7 @@ package com.johnch18.craftingcalculator;
 import com.johnch18.craftingcalculator.exceptions.CCInvalidIngredientString;
 import com.johnch18.craftingcalculator.exceptions.CCNullPtrException;
 import com.johnch18.craftingcalculator.exceptions.CCRecursionException;
+import com.johnch18.craftingcalculator.repl.RecipeREPL;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -73,10 +74,13 @@ public class CraftingCalculatorTest {
         }
     }
 
-    public static void main(
-            String[] args
-    ) throws CCInvalidIngredientString, CCRecursionException, CCNullPtrException, IOException {
-        loadBook();
+    public static void replTest() {
+        RecipeREPL repl = new RecipeREPL("test.json");
+        repl.repl();
+    }
+
+    public static void main(String[] args) {
+        replTest();
     }
 
 }

@@ -19,6 +19,7 @@ public class RecipeBook {
     private static final String recipeEnabledFieldName = "enabled";
 
     private final List<Recipe> recipes;
+    private boolean isDirty;
 
     private static String readFile(String fileName) throws IOException {
         String everything;
@@ -68,6 +69,7 @@ public class RecipeBook {
         } catch (IOException e) {
             e.printStackTrace();;
         }
+        setDirty(false);
     }
 
     private void dumpRecipes(JSONObject obj) {
@@ -85,6 +87,7 @@ public class RecipeBook {
     }
 
     public RecipeBook() {
+        setDirty(true);
         recipes = new ArrayList<>();
     }
 
@@ -108,8 +111,8 @@ public class RecipeBook {
         Recipe recipe = new Recipe(outputs, inputs);
         recipe.setEnabled(enabled);
         addRecipe(recipe);
+        setDirty(true);
     }
-
 
     public List<Recipe> getRecipesByOutput(String component) {
         return getRecipesByOutput(Component.getComponent(component));
@@ -130,6 +133,14 @@ public class RecipeBook {
 
     public List<Recipe> getRecipes() {
         return recipes;
+    }
+
+    public boolean isDirty() {
+        return isDirty;
+    }
+
+    public void setDirty(boolean dirty) {
+        isDirty = dirty;
     }
 
 }

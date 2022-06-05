@@ -123,6 +123,8 @@ public class Ingredient {
         result += getComponentName();
         result += ":";
         result += String.valueOf(getAmount());
+        if (getComponent().isFluid())
+            result += "L";
         result += ":";
         result += String.valueOf(getChance());
         return result;
