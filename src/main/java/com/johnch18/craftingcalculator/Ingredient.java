@@ -1,6 +1,8 @@
 package com.johnch18.craftingcalculator;
 
 import com.johnch18.craftingcalculator.exceptions.CCInvalidIngredientString;
+import com.johnch18.craftingcalculator.exceptions.CCNullPtrException;
+import com.johnch18.craftingcalculator.exceptions.CCRecursionException;
 
 public class Ingredient {
 
@@ -42,6 +44,10 @@ public class Ingredient {
         setAmount(amount);
         setChance(chance);
         setEnabled(true);
+    }
+
+    public Ingredient(String name, int amount) {
+        this(Component.getComponent(name), amount);
     }
 
     private void initializeFromString(String ingredientString) throws CCInvalidIngredientString {
@@ -123,6 +129,8 @@ public class Ingredient {
         result += getComponentName();
         result += ":";
         result += String.valueOf(getAmount());
+        if (getComponent().isFluid())
+            result += "L";
         result += ":";
         result += String.valueOf(getChance());
         return result;
@@ -181,17 +189,23 @@ public class Ingredient {
     public String toStringFancy() {
         StringBuilder sb = new StringBuilder();
         if (amount > 0) {
-            if (amount != 1 || component.isFluid()) {
-                sb.append(amount);
-                if (component.isFluid()) {
-                    sb.append("L ");
-                } else {
-                    sb.append("x ");
-                }
+            sb.append(amount);
+            if (component.isFluid()) {
+                sb.append("L ");
+            } else {
+                sb.append("x ");
             }
             sb.append(getComponent().getFancyName());
         }
         return sb.toString();
+    }
+
+    public CostResult getCost() throws CCRecursionException, CCNullPtrException {
+        return getCost(new IngredientList());
+    }
+
+    public CostResult getCost(IngredientList cache) throws CCRecursionException, CCNullPtrException {
+        return getComponent().getCostOf(getAmount(), cache);
     }
 
 }

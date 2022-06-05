@@ -17,10 +17,11 @@ public class Component {
     // List of recipes
     private final List<Recipe> recipes;
     // Name of component
-    private String name;
+    private final String name;
     // Whether it is a fluid
-    private boolean isFluid;
-    private String fancyName;
+    private final boolean isFluid;
+    // More readable string
+    private final String fancyName;
 
     /*
      * Construction / Destruction
@@ -35,8 +36,8 @@ public class Component {
     }
 
     private Component(String name, boolean isFluid, String fancyName) {
-        setName(name);
-        setFluid(isFluid);
+        this.name = name;
+        this.isFluid = isFluid;
         this.fancyName = fancyName;
         recipes = new ArrayList<>();
     }
@@ -121,16 +122,8 @@ public class Component {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public boolean isFluid() {
         return isFluid;
-    }
-
-    public void setFluid(boolean fluid) {
-        isFluid = fluid;
     }
 
     public List<Recipe> getRecipes() {

@@ -3,12 +3,9 @@ package com.johnch18.craftingcalculator;
 import com.johnch18.craftingcalculator.exceptions.CCInvalidIngredientString;
 import com.johnch18.craftingcalculator.exceptions.CCNullPtrException;
 import com.johnch18.craftingcalculator.exceptions.CCRecursionException;
-import com.johnch18.craftingcalculator.tree.Node;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import static java.lang.Math.ceil;
@@ -16,7 +13,6 @@ import static java.lang.Math.min;
 
 public class Recipe {
 
-    public static final int maxRecursionDepth = 5000;
     //
     private final IngredientList inputs;
     private final IngredientList outputs;
@@ -43,100 +39,34 @@ public class Recipe {
 
     public Recipe(IngredientList outputs, IngredientList inputs) {
         this();
-        for (Map.Entry<String, Ingredient> entry: outputs.getIterator())
+        for (Map.Entry<String, Ingredient> entry : outputs.getIterator())
             addOutput(entry.getValue());
-        for (Map.Entry<String, Ingredient> entry: inputs.getIterator())
+        for (Map.Entry<String, Ingredient> entry : inputs.getIterator())
             addInput(entry.getValue());
+    }
+
+    public static Recipe deserialize(JSONObject object) throws CCInvalidIngredientString {
+        JSONArray outputList = object.optJSONArray("outputs");
+        JSONArray inputList = object.optJSONArray("inputs");
+        boolean enabled = object.optBoolean("enabled", true);
+        //
+        IngredientList outputs = new IngredientList();
+        IngredientList inputs = new IngredientList();
+        //
+        for (Object obj : outputList)
+            outputs.addIngredient(new Ingredient((String) obj));
+        for (Object obj : inputList)
+            inputs.addIngredient(new Ingredient((String) obj));
+        //
+        Recipe result = new Recipe(outputs, inputs);
+        result.setEnabled(enabled);
+        return result;
     }
 
     public Node getTree(Ingredient ingredient) {
         Node node = new Node(ingredient);
         node.generateChildren();
         return node;
-    }
-
-    private void getCostRecursive(Ingredient target,
-                                  CostResult result) throws CCRecursionException, CCNullPtrException {
-        getCostRecursive(target, result.getCost(), result.getExcess(), 0);
-    }
-
-    private void getCostRecursive(
-            Ingredient initialIngredient,
-            IngredientList inputList,
-            IngredientList cache,
-            int depth
-    ) throws CCRecursionException, CCNullPtrException {
-        if (depth > maxRecursionDepth)
-            throw new CCRecursionException("Maximum Recursion Depth reached.");
-        //
-        Ingredient targetIngredient = getOutputIngredient(initialIngredient);
-        if (targetIngredient == null)
-            throw new CCNullPtrException("Invalid targetIngredient");
-        // Factor in items in the cache
-        subtractFromCache(initialIngredient, cache);
-        // If request already satisfied, skip
-        if (initialIngredient.getAmount() <= 0)
-            return;
-        // Calculate number of crafts needed
-        int numberOfCrafts = calculateNumberOfCrafts(initialIngredient, targetIngredient);
-        // Deal with excess outputs, add them to cache
-        factorInOutputs(initialIngredient, numberOfCrafts, cache);
-        // Do recursion
-        doRecursiveStep(numberOfCrafts, inputList, cache, depth);
-    }
-
-    public void doRecursiveStep(
-            int numberOfCrafts,
-            IngredientList inputList,
-            IngredientList cache,
-            int depth
-    ) throws CCRecursionException, CCNullPtrException {
-        for (Map.Entry<String, Ingredient> entry : inputs.getIterator()) {
-            // Get the new target ingredient, component, and recipe
-            Ingredient newInputIngredient = entry.getValue().multiply(numberOfCrafts);
-            Component component = newInputIngredient.getComponent();
-            Recipe recipe = component.getActiveRecipe();
-            if (recipe == null || !recipe.isEnabled()) {
-                // Skip if recipe is not valid
-                inputList.addIngredient(newInputIngredient);
-            } else {
-                // Recurse otherwise
-                recipe.getCostRecursive(newInputIngredient, inputList, cache, depth + 1);
-            }
-        }
-    }
-
-    public void factorInOutputs(Ingredient initialIngredient, int numberOfCrafts, IngredientList cache) {
-        for (Map.Entry<String, Ingredient> entry : outputs.getIterator()) {
-            Ingredient scaledOutput = entry.getValue().multiply(numberOfCrafts);
-            if (!scaledOutput.isSameAs(initialIngredient))
-                cache.addIngredient(scaledOutput);
-            else {
-                int delta = scaledOutput.getAmount() - initialIngredient.getAmount();
-                if (delta > 0)
-                    cache.addIngredient(new Ingredient(scaledOutput.getComponent(), delta));
-            }
-        }
-    }
-
-    public int calculateNumberOfCrafts(Ingredient initialIngredient, Ingredient targetIngredient) {
-        double amount = targetIngredient.getAmount();
-        double chance = targetIngredient.getChance();
-        double factor = amount * chance;
-        return (int) ceil(initialIngredient.getAmount() / factor);
-    }
-
-    public void subtractFromCache(Ingredient targetIngredient, IngredientList cache) {
-        // Factor in already provided items
-        for (Map.Entry<String, Ingredient> element : cache.getIterator()) {
-            Ingredient cacheIngredient = element.getValue();
-            // If matching ingredient found, subtract
-            if (cacheIngredient.isSameAs(targetIngredient)) {
-                int n = min(targetIngredient.getAmount(), cacheIngredient.getAmount());
-                targetIngredient.subInPlace(n);
-                cacheIngredient.subInPlace(n);
-            }
-        }
     }
 
     public Ingredient getOutputIngredient(Ingredient ingredient) {
@@ -170,7 +100,7 @@ public class Recipe {
     ) throws CCRecursionException, CCNullPtrException {
         CostResult result = new CostResult();
         result.getExcess().combineWith(preCache);
-        getCostRecursive(target, result);
+        RecipeAlgorithm.getCostRecursive(this, target, result);
         return result;
     }
 
@@ -195,32 +125,14 @@ public class Recipe {
         JSONArray outputList = new JSONArray();
         JSONArray inputList = new JSONArray();
         //
-        for (Map.Entry<String, Ingredient> entry: outputs.getIterator())
+        for (Map.Entry<String, Ingredient> entry : outputs.getIterator())
             outputList.put(entry.getValue().toString());
-        for (Map.Entry<String, Ingredient> entry: inputs.getIterator())
+        for (Map.Entry<String, Ingredient> entry : inputs.getIterator())
             inputList.put(entry.getValue().toString());
         //
         result.put("outputs", outputList);
         result.put("inputs", inputList);
         result.put("enabled", isEnabled());
-        return result;
-    }
-
-    public static Recipe deserialize(JSONObject object) throws CCInvalidIngredientString {
-        JSONArray outputList = object.optJSONArray("outputs");
-        JSONArray inputList = object.optJSONArray("inputs");
-        boolean enabled = object.optBoolean("enabled", true);
-        //
-        IngredientList outputs = new IngredientList();
-        IngredientList inputs = new IngredientList();
-        //
-        for (Object obj : outputList)
-            outputs.addIngredient(new Ingredient((String)obj));
-        for (Object obj : inputList)
-            inputs.addIngredient(new Ingredient((String)obj));
-        //
-        Recipe result = new Recipe(outputs, inputs);
-        result.setEnabled(enabled);
         return result;
     }
 
@@ -243,6 +155,20 @@ public class Recipe {
 
     public IngredientList getOutputs() {
         return outputs;
+    }
+
+    public String toStringFancy() {
+        StringBuilder sb = new StringBuilder();
+        for (Map.Entry<String, Ingredient> entry : inputs.getIterator()) {
+            sb.append(entry.getValue().toStringFancy());
+            sb.append("  ");
+        }
+        sb.append("->  ");
+        for (Map.Entry<String, Ingredient> entry : outputs.getIterator()) {
+            sb.append(entry.getValue().toStringFancy());
+            sb.append("  ");
+        }
+        return sb.toString();
     }
 
 }
