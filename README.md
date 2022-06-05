@@ -58,9 +58,10 @@ class Test {
 ```
 We would get the following output:
 ```
-Inputs: 
-magmaCream:34
-Excess Outputs: 
-tinyNetherStarDust:3
+Inputs:
+	magmaCream:34:1.0
+Leftovers:
+	tinyNetherStarDust:2:1.0
+	netherStar:1:1.0
 ```
 Which is correct.
