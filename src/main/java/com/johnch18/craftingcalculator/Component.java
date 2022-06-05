@@ -3,6 +3,7 @@ package com.johnch18.craftingcalculator;
 import com.johnch18.craftingcalculator.exceptions.CCInvalidIngredientString;
 import com.johnch18.craftingcalculator.exceptions.CCNullPtrException;
 import com.johnch18.craftingcalculator.exceptions.CCRecursionException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -53,6 +54,10 @@ public class Component {
         recipes = new ArrayList<>();
     }
 
+    public static Iterable<? extends Component> getComponents() {
+        return registry.values();
+    }
+
     public void addRecipe(Recipe recipe) {
         recipes.add(recipe);
     }
@@ -82,6 +87,19 @@ public class Component {
             String[] ingredientList
     ) throws CCRecursionException, CCNullPtrException, CCInvalidIngredientString {
         return getCostOf(n, new IngredientList(ingredientList));
+    }
+
+    public JSONObject serialize() {
+        JSONObject result = new JSONObject();
+        result.put("name", getName());
+        result.put("isFluid", isFluid());
+        return result;
+    }
+
+    public static Component deserialize(JSONObject object) {
+        String name = object.optString("name");
+        boolean isFluid = object.optBoolean("isFluid", false);
+        return getComponent(name, isFluid);
     }
 
     /*

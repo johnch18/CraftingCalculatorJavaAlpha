@@ -3,7 +3,11 @@ package com.johnch18.craftingcalculator;
 import com.johnch18.craftingcalculator.exceptions.CCInvalidIngredientString;
 import com.johnch18.craftingcalculator.exceptions.CCNullPtrException;
 import com.johnch18.craftingcalculator.exceptions.CCRecursionException;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import static java.lang.Math.ceil;
@@ -177,6 +181,40 @@ public class Recipe {
         }
         result.append(">");
         return result.toString();
+    }
+
+    public JSONObject serialize() {
+        JSONObject result = new JSONObject();
+        JSONArray outputList = new JSONArray();
+        JSONArray inputList = new JSONArray();
+        //
+        for (Map.Entry<String, Ingredient> entry: outputs.getIterator())
+            outputList.put(entry.getValue().toString());
+        for (Map.Entry<String, Ingredient> entry: inputs.getIterator())
+            inputList.put(entry.getValue().toString());
+        //
+        result.put("outputs", outputList);
+        result.put("inputs", inputList);
+        result.put("enabled", isEnabled());
+        return result;
+    }
+
+    public static Recipe deserialize(JSONObject object) throws CCInvalidIngredientString {
+        JSONArray outputList = object.optJSONArray("outputs");
+        JSONArray inputList = object.optJSONArray("inputs");
+        boolean enabled = object.optBoolean("enabled", true);
+        //
+        IngredientList outputs = new IngredientList();
+        IngredientList inputs = new IngredientList();
+        //
+        for (Object obj : outputList)
+            outputs.addIngredient(new Ingredient((String)obj));
+        for (Object obj : inputList)
+            inputs.addIngredient(new Ingredient((String)obj));
+        //
+        Recipe result = new Recipe(outputs, inputs);
+        result.setEnabled(enabled);
+        return result;
     }
 
     /*

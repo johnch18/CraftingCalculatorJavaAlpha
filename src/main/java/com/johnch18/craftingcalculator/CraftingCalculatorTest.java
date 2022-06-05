@@ -4,11 +4,12 @@ import com.johnch18.craftingcalculator.exceptions.CCInvalidIngredientString;
 import com.johnch18.craftingcalculator.exceptions.CCNullPtrException;
 import com.johnch18.craftingcalculator.exceptions.CCRecursionException;
 
+import java.io.FileNotFoundException;
 import java.util.Map;
 
 public class CraftingCalculatorTest {
 
-    public static void test_recursion() throws CCInvalidIngredientString, CCRecursionException, CCNullPtrException {
+    public static void test_recursion() throws CCInvalidIngredientString, CCRecursionException, CCNullPtrException, FileNotFoundException {
         //
         RecipeBook recipeBook = new RecipeBook();
         recipeBook.addRecipe(
@@ -29,6 +30,7 @@ public class CraftingCalculatorTest {
         });
         display(results);
         //
+        recipeBook.dumpBookToFile("./test.rb");
     }
 
     public static void test_simple() throws CCInvalidIngredientString, CCRecursionException, CCNullPtrException {
@@ -65,7 +67,9 @@ public class CraftingCalculatorTest {
         }
     }
 
-    public static void main(String[] args) throws CCInvalidIngredientString, CCRecursionException, CCNullPtrException {
+    public static void main(
+            String[] args
+    ) throws CCInvalidIngredientString, CCRecursionException, CCNullPtrException, FileNotFoundException {
         test_recursion();
     }
 

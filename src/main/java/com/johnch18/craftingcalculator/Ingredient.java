@@ -120,7 +120,7 @@ public class Ingredient {
 
     public String toString() {
         String result = "";
-        result += getComponent() != null ? getComponentName() : "null";
+        result += getComponentName();
         result += ":";
         result += String.valueOf(getAmount());
         result += ":";
