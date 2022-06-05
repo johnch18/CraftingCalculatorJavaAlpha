@@ -27,20 +27,21 @@ public class Recipe {
         isEnabled = true;
     }
 
-    public Recipe(Ingredient[] outputs, Ingredient[] inputs) {
-        this();
-        for (Ingredient output : outputs)
-            addOutput(output);
-        for (Ingredient input : inputs)
-            addInput(input);
+    public Recipe(Ingredient[] outputs, Ingredient[] inputs) throws CCInvalidIngredientString {
+        this(new IngredientList(outputs), new IngredientList(inputs));
     }
 
     public Recipe(String[] outputs, String[] inputs) throws CCInvalidIngredientString {
+        this(new IngredientList(outputs), new IngredientList(inputs));
+    }
+
+
+    public Recipe(IngredientList outputs, IngredientList inputs) {
         this();
-        for (String output : outputs)
-            addOutput(new Ingredient(output));
-        for (String input : inputs)
-            addInput(new Ingredient(input));
+        for (Map.Entry<String, Ingredient> entry: outputs.getIterator())
+            addOutput(entry.getValue());
+        for (Map.Entry<String, Ingredient> entry: inputs.getIterator())
+            addInput(entry.getValue());
     }
 
     private void getCostRecursive(Ingredient target,

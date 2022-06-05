@@ -21,23 +21,24 @@ Given a recipe tree, rough approximation of NH's star recipe, simplified for dem
 class Test {
 
     public static void main(String[] args) {
-        // Use the following to initialize recipes:
-        Recipe netherStarRecipe = new Recipe(
+        RecipeBook recipeBook = new RecipeBook();
+        recipeBook.addRecipe(
                 new String[]{"netherStar:2"},
                 new String[]{"tinyNetherStarDust", "magmaCream"}
         );
-        Recipe tinyNetherStarDustRecipe = new Recipe(
+        recipeBook.addRecipe(
                 new String[]{"tinyNetherStarDust:9"},
                 new String[]{"netherStarDust"}
         );
-        Recipe netherStarDustRecipe = new Recipe(
+        recipeBook.addRecipe(
                 new String[]{"netherStarDust"},
                 new String[]{"netherStar"}
         );
-        // Use the following to query the program
-        Ingredient target = new Ingredient("woodenPickaxe:4");
-        CostResult result = woodPickaxeRecipe.getCost(target);
-        display(result);
+        //
+        CostResult results = Component.createComponent("netherStar").getCostOf(64, new IngredientList(new String[]{
+                "tinyNetherStarDust:1"
+        }));
+        display(results);
     }
 
     private static void display(CostResult result) {

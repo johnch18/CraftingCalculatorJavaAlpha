@@ -1,5 +1,8 @@
 package com.johnch18.craftingcalculator;
 
+import com.johnch18.craftingcalculator.exceptions.CCNullPtrException;
+import com.johnch18.craftingcalculator.exceptions.CCRecursionException;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -63,6 +66,14 @@ public class Component {
 
     public boolean isSameAs(Component component) {
         return getName().equals(component.getName());
+    }
+
+    public CostResult getCostOf(int n) throws CCRecursionException, CCNullPtrException {
+        return getCostOf(n, new IngredientList());
+    }
+
+    public CostResult getCostOf(int n, IngredientList ingredientList) throws CCRecursionException, CCNullPtrException {
+        return getActiveRecipe().getCost(new Ingredient(this, n), ingredientList);
     }
 
     /*

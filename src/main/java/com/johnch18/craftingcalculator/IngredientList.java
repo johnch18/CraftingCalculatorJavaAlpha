@@ -27,6 +27,13 @@ public class IngredientList {
         }
     }
 
+    public IngredientList(Ingredient[] ingredients) {
+        this();
+        for (Ingredient ingredient : ingredients) {
+            addIngredient(ingredient);
+        }
+    }
+
     public void addIngredient(Ingredient ingredient) {
         String name = ingredient.getComponentName();
         if (!contains(ingredient)) {
@@ -55,6 +62,9 @@ public class IngredientList {
         }
     }
 
+    public boolean contains(Component component) {
+        return contains(new Ingredient(component));
+    }
     public boolean contains(Ingredient ingredient) {
         return mapping.containsKey(ingredient.getComponentName());
     }

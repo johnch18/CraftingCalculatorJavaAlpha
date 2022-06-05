@@ -10,49 +10,48 @@ public class CraftingCalculatorTest {
 
     public static void test_recursion() throws CCInvalidIngredientString, CCRecursionException, CCNullPtrException {
         //
-        Recipe netherStarRecipe = new Recipe(
+        RecipeBook recipeBook = new RecipeBook();
+        recipeBook.addRecipe(
                 new String[]{"netherStar:2"},
                 new String[]{"tinyNetherStarDust", "magmaCream"}
         );
-        Recipe tinyNetherStarDustRecipe = new Recipe(
+        recipeBook.addRecipe(
                 new String[]{"tinyNetherStarDust:9"},
                 new String[]{"netherStarDust"}
         );
-        Recipe netherStarDustRecipe = new Recipe(
+        recipeBook.addRecipe(
                 new String[]{"netherStarDust"},
                 new String[]{"netherStar"}
         );
         //
-        System.out.println("Recipe:");
-        System.out.println(netherStarRecipe);
-        //
-        Ingredient target = new Ingredient("netherStar:64");
-        CostResult results = netherStarRecipe.getCost(target, new String[]{"tinyNetherStarDust"});
-        //
+        CostResult results = Component.createComponent("netherStar").getCostOf(64, new IngredientList(new String[]{
+                "tinyNetherStarDust:1"
+        }));
         display(results);
         //
     }
 
     public static void test_simple() throws CCInvalidIngredientString, CCRecursionException, CCNullPtrException {
         //
-        Recipe woodPickaxeRecipe = new Recipe(
+        RecipeBook recipeBook = new RecipeBook();
+        recipeBook.addRecipe(
                 new String[]{"woodenPickaxe"},
                 new String[]{"woodPlank:3", "stick:2"}
         );
-        Recipe woodPlankRecipe = new Recipe(
+        recipeBook.addRecipe(
                 new String[]{"woodPlank:4"},
                 new String[]{"woodLog:1"}
         );
-        Recipe stickRecipe = new Recipe(
+        recipeBook.addRecipe(
                 new String[]{"stick:4"},
                 new String[]{"woodPlank:2"}
         );
         //
+        Recipe woodPickaxeRecipe = recipeBook.getRecipesByOutput("woodenPickaxe").get(0);
         System.out.println(woodPickaxeRecipe);
         //
-        Ingredient target = new Ingredient("woodenPickaxe:4");
-        CostResult result = woodPickaxeRecipe.getCost(target);
-        //
+        Component test = Component.createComponent("woodenPickaxe");
+        CostResult result = test.getCostOf(4, new IngredientList());
         display(result);
     }
 
