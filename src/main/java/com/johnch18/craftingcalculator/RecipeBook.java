@@ -57,7 +57,7 @@ public class RecipeBook {
             Component.deserialize((JSONObject) temp);
     }
 
-    public void dumpBookToFile(String fileName) throws FileNotFoundException {
+    public void dumpBookToFile(String fileName) {
         JSONObject obj = new JSONObject();
         //
         dumpComponents(obj);
@@ -65,7 +65,6 @@ public class RecipeBook {
         String result = obj.toString();
         try (FileWriter writer = new FileWriter(fileName)) {
             writer.write(result);
-            writer.close();
         } catch (IOException e) {
             e.printStackTrace();;
         }
