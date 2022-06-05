@@ -8,7 +8,7 @@ public class Node {
 
     private Node parent;
     private final List<Node> children;
-    private Ingredient contents;
+    private Ingredient ingredient;
 
     /*
     * Methods
@@ -27,7 +27,7 @@ public class Node {
     }
 
     public Node(Ingredient ingredient, Node parent, ArrayList<Node> children) {
-        setContents(ingredient);
+        setIngredient(ingredient);
         setParent(parent);
         this.children = children;
     }
@@ -38,20 +38,20 @@ public class Node {
 
     public void generateChildren(IngredientList cache) {
         // TODO: Factor in already attained items
-        Recipe recipe = contents.getComponent().getActiveRecipe();
+        Recipe recipe = ingredient.getComponent().getActiveRecipe();
         if (recipe == null || !recipe.isEnabled())
             return;
         //
-        recipe.subtractFromCache(contents, cache);
-        if (contents.getAmount() <= 0)
+        recipe.subtractFromCache(ingredient, cache);
+        if (ingredient.getAmount() <= 0)
             return;
         //
-        Ingredient targetIngredient = recipe.getOutputIngredient(contents);
+        Ingredient targetIngredient = recipe.getOutputIngredient(ingredient);
         if (targetIngredient == null)
             return;
         //
-        int numberOfCrafts = recipe.calculateNumberOfCrafts(contents, targetIngredient);
-        recipe.factorInOutputs(contents, numberOfCrafts, cache);
+        int numberOfCrafts = recipe.calculateNumberOfCrafts(ingredient, targetIngredient);
+        recipe.factorInOutputs(ingredient, numberOfCrafts, cache);
         //
         for (Map.Entry<String, Ingredient> entry: recipe.getInputs().getIterator()) {
             Ingredient modified = entry.getValue().multiply(numberOfCrafts);
@@ -69,7 +69,7 @@ public class Node {
 
     public String render(int depth) {
         StringBuilder sb = new StringBuilder();
-        if (contents.isValid()) {
+        if (ingredient.isValid()) {
             for (int i = 0; i < depth; i++) {
                 sb.append("        ");
             }
@@ -80,7 +80,7 @@ public class Node {
             else
                 sb.append("-");
             sb.append(" ");
-            sb.append(contents.toStringFancy());
+            sb.append(ingredient.toStringFancy());
             sb.append("\n");
             for (Node child : getChildren()) {
                 sb.append(child.render(depth + 1));
@@ -109,12 +109,12 @@ public class Node {
         return children;
     }
 
-    public Ingredient getContents() {
-        return contents;
+    public Ingredient getIngredient() {
+        return ingredient;
     }
 
-    public void setContents(Ingredient contents) {
-        this.contents = contents;
+    public void setIngredient(Ingredient ingredient) {
+        this.ingredient = ingredient;
     }
 
 }
