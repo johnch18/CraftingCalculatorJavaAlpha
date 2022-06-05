@@ -11,29 +11,9 @@ import java.util.Map;
 
 public class CraftingCalculatorTest {
 
-    public static void test_recursion() throws CCInvalidIngredientString, CCRecursionException, CCNullPtrException, FileNotFoundException {
+    public static void test_recursion() throws CCInvalidIngredientString, CCRecursionException, CCNullPtrException, IOException {
         //
-        RecipeBook recipeBook = new RecipeBook();
-        recipeBook.addRecipe(
-                new String[]{"netherStar:2"},
-                new String[]{"tinyNetherStarDust", "magmaCream"}
-        );
-        recipeBook.addRecipe(
-                new String[]{"tinyNetherStarDust:9"},
-                new String[]{"netherStarDust"}
-        );
-        recipeBook.addRecipe(
-                new String[]{"netherStarDust"},
-                new String[]{"netherStar"}
-        );
-        recipeBook.addRecipe(
-                new String[]{"magmaCream"},
-                new String[]{"slimeball", "blazePowder"}
-        );
-        recipeBook.addRecipe(
-                new String[]{"blazePowder:5"},
-                new String[]{"blazeRod"}
-        );
+        RecipeBook recipeBook = RecipeBook.loadBookFromFile("./test.json");
         //
         CostResult results = Component.getComponent("netherStar").getCostOf(64, new String[]{
                 "netherStar"
@@ -97,7 +77,7 @@ public class CraftingCalculatorTest {
         repl.repl();
     }
 
-    public static void main(String[] args) throws CCInvalidIngredientString, CCRecursionException, CCNullPtrException, FileNotFoundException {
+    public static void main(String[] args) throws CCInvalidIngredientString, CCRecursionException, CCNullPtrException, IOException {
         test_recursion();
     }
 
