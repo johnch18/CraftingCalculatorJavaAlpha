@@ -4,6 +4,7 @@ import com.johnch18.craftingcalculator.exceptions.CCInvalidIngredientString;
 import com.johnch18.craftingcalculator.exceptions.CCNullPtrException;
 import com.johnch18.craftingcalculator.exceptions.CCRecursionException;
 import com.johnch18.craftingcalculator.repl.RecipeREPL;
+import com.johnch18.craftingcalculator.tree.Node;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -26,11 +27,19 @@ public class CraftingCalculatorTest {
                 new String[]{"netherStarDust"},
                 new String[]{"netherStar"}
         );
+        recipeBook.addRecipe(
+                new String[]{"magmaCream"},
+                new String[]{"slimeball", "blazePowder"}
+        );
+        recipeBook.addRecipe(
+                new String[]{"blazePowder:5"},
+                new String[]{"blazeRod"}
+        );
         //
         CostResult results = Component.getComponent("netherStar").getCostOf(64, new String[]{
                 "netherStar"
         });
-        display(results);
+        // display(results);
         //
         recipeBook.dumpBookToFile("./test.json");
     }
@@ -59,6 +68,12 @@ public class CraftingCalculatorTest {
     public static void loadBook() throws CCInvalidIngredientString, IOException {
         RecipeBook book = RecipeBook.loadBookFromFile("./test.json");
         book.dumpBookToFile("./test2.json");
+    }
+
+    public static void testTree() throws CCInvalidIngredientString, IOException, CCRecursionException, CCNullPtrException {
+        RecipeBook book = RecipeBook.loadBookFromFile("./test.json");
+        Node root = Component.getComponent("netherStar").getActiveRecipe().getTree(new Ingredient("netherStar:64"));
+        System.out.println(root.render());
     }
 
     private static void display(CostResult result) {

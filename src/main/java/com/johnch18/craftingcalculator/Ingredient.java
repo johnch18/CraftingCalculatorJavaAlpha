@@ -13,58 +13,13 @@ public class Ingredient {
      * Methods
      * */
 
-    private void initializeFromString(String ingredientString) throws CCInvalidIngredientString {
-        String[] parts = ingredientString.split(":");
-        // Needs to be at least 1 long
-        if (parts.length <= 0)
-            throw new CCInvalidIngredientString("Invalid string");
-        //
-        String name = parts[0];
-        int amount = 1;
-        double chance = 1.0;
-        boolean isFluid = false;
-        // int metadata = 0;
-        String amountString = null;
-        String chanceString = null;
-        // String metadataString = null;
-        //
-        if (parts.length > 1) amountString = parts[1];
-        if (parts.length > 2) chanceString = parts[2];
-        // TODO: Implement metadata handling
-        // if (parts.length > 3) metadataString = parts[3];
-        // Get the amount and determine if it's a fluid
-        if (amountString != null) {
-            if ( amountString.contains("L")) {
-                isFluid = true;
-                amount = Integer.parseInt(amountString.substring(0, amountString.length() - 1));
-            } else {
-                amount = Integer.parseInt(amountString);
-            }
-        }
-        // Get the chance and handle if it's a percentage
-        if (chanceString != null) {
-            if (chanceString.contains("%")) {
-                chance = Double.parseDouble(chanceString.substring(0, chanceString.length() - 1)) / 100.0f;
-            } else {
-                chance = Double.parseDouble(chanceString);
-            }
-        }
-        // TODO: Implement metadata handling
-        // if (metadataString != null) metadata = Integer.parseInt(metadataString);
-        //
-        setComponent(Component.getComponent(name, isFluid));
-        setAmount(amount);
-        setChance(chance);
-        // setMetadata(metadata);
-    }
-
-
     public Ingredient() {
         setComponent(null);
         setAmount(1);
         setChance(1.0f);
         setEnabled(true);
     }
+
 
     public Ingredient(String ingredientString) throws CCInvalidIngredientString {
         this();
@@ -87,6 +42,51 @@ public class Ingredient {
         setAmount(amount);
         setChance(chance);
         setEnabled(true);
+    }
+
+    private void initializeFromString(String ingredientString) throws CCInvalidIngredientString {
+        String[] parts = ingredientString.split(":");
+        // Needs to be at least 1 long
+        if (parts.length <= 0)
+            throw new CCInvalidIngredientString("Invalid string");
+        //
+        String name = parts[0];
+        int amount = 1;
+        double chance = 1.0;
+        boolean isFluid = false;
+        // int metadata = 0;
+        String amountString = null;
+        String chanceString = null;
+        // String metadataString = null;
+        //
+        if (parts.length > 1) amountString = parts[1];
+        if (parts.length > 2) chanceString = parts[2];
+        // TODO: Implement metadata handling
+        // if (parts.length > 3) metadataString = parts[3];
+        // Get the amount and determine if it's a fluid
+        if (amountString != null) {
+            if (amountString.contains("L")) {
+                isFluid = true;
+                amount = Integer.parseInt(amountString.substring(0, amountString.length() - 1));
+            } else {
+                amount = Integer.parseInt(amountString);
+            }
+        }
+        // Get the chance and handle if it's a percentage
+        if (chanceString != null) {
+            if (chanceString.contains("%")) {
+                chance = Double.parseDouble(chanceString.substring(0, chanceString.length() - 1)) / 100.0f;
+            } else {
+                chance = Double.parseDouble(chanceString);
+            }
+        }
+        // TODO: Implement metadata handling
+        // if (metadataString != null) metadata = Integer.parseInt(metadataString);
+        //
+        setComponent(Component.getComponent(name, isFluid));
+        setAmount(amount);
+        setChance(chance);
+        // setMetadata(metadata);
     }
 
     public boolean isSameAs(Ingredient targetIngredient) {
@@ -136,6 +136,10 @@ public class Ingredient {
         return null;
     }
 
+    public int getEffectiveNumber() {
+        return (int) (amount * chance);
+    }
+
     /*
      * Getters and Setters
      * */
@@ -170,6 +174,26 @@ public class Ingredient {
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public boolean isValid() {
+        return component != null && amount > 0;
+    }
+
+    public String toStringFancy() {
+        StringBuilder sb = new StringBuilder();
+        if (amount > 0) {
+            if (amount != 1 || component.isFluid()) {
+                sb.append(amount);
+                if (component.isFluid()) {
+                    sb.append("L ");
+                } else {
+                    sb.append("x ");
+                }
+            }
+            sb.append(getComponent().getFancyName());
+        }
+        return sb.toString();
     }
 
 }
