@@ -24,9 +24,9 @@ public class CraftingCalculatorTest {
                 new String[]{"netherStar"}
         );
         //
-        CostResult results = Component.createComponent("netherStar").getCostOf(64, new IngredientList(new String[]{
+        CostResult results = Component.createComponent("netherStar").getCostOf(64, new String[]{
                 "netherStar"
-        }));
+        });
         display(results);
         //
     }

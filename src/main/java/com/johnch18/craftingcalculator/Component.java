@@ -1,5 +1,6 @@
 package com.johnch18.craftingcalculator;
 
+import com.johnch18.craftingcalculator.exceptions.CCInvalidIngredientString;
 import com.johnch18.craftingcalculator.exceptions.CCNullPtrException;
 import com.johnch18.craftingcalculator.exceptions.CCRecursionException;
 
@@ -74,6 +75,13 @@ public class Component {
 
     public CostResult getCostOf(int n, IngredientList ingredientList) throws CCRecursionException, CCNullPtrException {
         return getActiveRecipe().getCost(new Ingredient(this, n), ingredientList);
+    }
+
+    public CostResult getCostOf(
+            int n,
+            String[] ingredientList
+    ) throws CCRecursionException, CCNullPtrException, CCInvalidIngredientString {
+        return getCostOf(n, new IngredientList(ingredientList));
     }
 
     /*
