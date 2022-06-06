@@ -1,6 +1,6 @@
 package com.johnch18.craftingcalculator.repl;
 
-public class CommandExit implements Command {
+public class CommandExit implements ICommand {
 
     @Override
     public void execute(RecipeREPL repl, String[] args) {

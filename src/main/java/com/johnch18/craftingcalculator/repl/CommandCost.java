@@ -10,7 +10,7 @@ import com.johnch18.craftingcalculator.exceptions.CCRecursionException;
 import java.util.Arrays;
 import java.util.Map;
 
-public class CommandCost implements Command {
+public class CommandCost implements ICommand {
 
     @Override
     public String hook() {

@@ -3,10 +3,9 @@ package com.johnch18.craftingcalculator.repl;
 import com.johnch18.craftingcalculator.RecipeBook;
 import com.johnch18.craftingcalculator.exceptions.CCInvalidIngredientString;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
-public class CommandLoad implements Command {
+public class CommandLoad implements ICommand {
 
     @Override
     public String hook() {

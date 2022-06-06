@@ -11,7 +11,7 @@ import java.util.Map;
 
 public class RecipeREPL {
 
-    public static final Map<String, Command> commands = new HashMap<>();
+    public static final Map<String, ICommand> commands = new HashMap<>();
     private final REPLDialog dialog;
     private RecipeBook recipeBook;
     private String fileName;
@@ -29,7 +29,7 @@ public class RecipeREPL {
         loadBookFromFile();
     }
 
-    private static void addCommand(Command command) {
+    private static void addCommand(ICommand command) {
         commands.put(command.hook(), command);
     }
 
@@ -122,7 +122,7 @@ public class RecipeREPL {
         this.running = running;
     }
 
-    public Map<String, Command> getCommands() {
+    public Map<String, ICommand> getCommands() {
         return commands;
     }
 

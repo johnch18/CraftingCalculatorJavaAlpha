@@ -1,6 +1,6 @@
 package com.johnch18.craftingcalculator.repl;
 
-public class CommandSave implements Command {
+public class CommandSave implements ICommand {
 
     @Override
     public String hook() {

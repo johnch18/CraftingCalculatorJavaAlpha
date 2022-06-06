@@ -4,7 +4,7 @@ import com.johnch18.craftingcalculator.Component;
 
 import java.util.Arrays;
 
-public class CommandAddComponent implements Command {
+public class CommandAddComponent implements ICommand {
 
     @Override
     public String hook() {

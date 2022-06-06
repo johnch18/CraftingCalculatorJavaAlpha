@@ -2,7 +2,7 @@ package com.johnch18.craftingcalculator.repl;
 
 import com.johnch18.craftingcalculator.Component;
 
-public class CommandListComponents implements Command {
+public class CommandListComponents implements ICommand {
 
     @Override
     public String hook() {

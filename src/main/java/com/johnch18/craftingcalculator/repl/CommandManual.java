@@ -4,7 +4,7 @@ import com.johnch18.craftingcalculator.Utility;
 
 import java.io.FileNotFoundException;
 
-public class CommandManual implements Command {
+public class CommandManual implements ICommand {
 
     public static final String manualPath = "./src/main/resources/manual.md";
     public final String manualText = Utility.readFile(manualPath);

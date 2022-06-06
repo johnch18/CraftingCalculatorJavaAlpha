@@ -4,7 +4,7 @@ import com.johnch18.craftingcalculator.exceptions.CCInvalidIngredientString;
 
 import java.io.FileNotFoundException;
 
-public interface Command {
+public interface ICommand {
 
     String hook();
 

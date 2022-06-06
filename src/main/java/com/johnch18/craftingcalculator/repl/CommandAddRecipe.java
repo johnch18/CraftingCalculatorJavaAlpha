@@ -4,7 +4,7 @@ import com.johnch18.craftingcalculator.Ingredient;
 import com.johnch18.craftingcalculator.IngredientList;
 import com.johnch18.craftingcalculator.exceptions.CCInvalidIngredientString;
 
-public class CommandAddRecipe implements Command {
+public class CommandAddRecipe implements ICommand {
 
     @Override
     public String hook() {

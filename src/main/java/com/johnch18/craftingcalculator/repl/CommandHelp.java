@@ -2,13 +2,13 @@ package com.johnch18.craftingcalculator.repl;
 
 import java.util.Map;
 
-public class CommandHelp implements Command {
+public class CommandHelp implements ICommand {
 
     @Override
     public void execute(RecipeREPL repl, String[] args) {
-        Map<String, Command> commands = repl.getCommands();
+        Map<String, ICommand> commands = repl.getCommands();
         if (args.length == 0) {
-            for (Map.Entry<String, Command> entry : commands.entrySet()) {
+            for (Map.Entry<String, ICommand> entry : commands.entrySet()) {
                 execute(repl, new String[]{entry.getValue().hook()});
             }
         } else {

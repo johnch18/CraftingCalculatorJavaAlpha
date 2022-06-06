@@ -3,7 +3,7 @@ package com.johnch18.craftingcalculator.repl;
 import com.johnch18.craftingcalculator.Ingredient;
 import com.johnch18.craftingcalculator.exceptions.CCInvalidIngredientString;
 
-public class CommandTree implements Command {
+public class CommandTree implements ICommand {
 
     @Override
     public String hook() {
