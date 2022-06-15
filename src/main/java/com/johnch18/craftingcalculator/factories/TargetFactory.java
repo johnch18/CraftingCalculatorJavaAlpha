@@ -4,12 +4,12 @@ import com.johnch18.craftingcalculator.impl.Target;
 import com.johnch18.craftingcalculator.intr.ITarget;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class TargetFactory {
 
-    private final static List<ITarget> targetList = new ArrayList<>();
+    private final static Map<ITarget, ITarget> targetMap = new HashMap<>();
 
     public static ITarget deserialize(JSONObject json) {
         String name = json.getString("name");
@@ -19,10 +19,12 @@ public class TargetFactory {
         switch (type) {
             default: {
                 target = new Target(name, metadata);
+                targetMap.put(target, target);
+                break;
             }
         }
-        if (targetList.contains(target))
-            return targetList.get(targetList.indexOf(targetList));
+        if (targetMap.containsKey(target))
+            return targetMap.get(target);
         return target;
     }
 
