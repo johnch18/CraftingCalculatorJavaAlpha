@@ -80,7 +80,7 @@ public class Ingredient implements IIngredient {
         StringBuilder sb = new StringBuilder();
         sb.append(amount);
         sb.append("x ");
-        sb.append(component.toString());
+        sb.append(component);
         return sb.toString();
     }
 

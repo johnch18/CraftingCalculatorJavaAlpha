@@ -6,17 +6,24 @@ import com.johnch18.craftingcalculator.interfaces.IRecipe;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Component implements IComponent {
 
+    private final List<IRecipe> recipes = new ArrayList<>();
     private String name;
     private int metadata;
-    private final List<IRecipe> recipes = new ArrayList<>();
-
+    
     @Override
     public String getName() {
         return name;
+    }
+
+    @Override
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override
@@ -32,11 +39,6 @@ public class Component implements IComponent {
     @Override
     public void addRecipe(IRecipe recipe) {
         recipes.add(recipe);
-    }
-
-    @Override
-    public void setName(String name) {
-        this.name = name;
     }
 
     @Override
