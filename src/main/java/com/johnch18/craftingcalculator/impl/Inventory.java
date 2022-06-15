@@ -37,12 +37,12 @@ public class Inventory implements IInventory {
 
     @Override
     public IStack get(ITarget target) {
-        return null;
+        return stacks.get(target);
     }
 
     @Override
     public IStack get(IStack stack) {
-        return null;
+        return get(stack.getTarget());
     }
 
 }

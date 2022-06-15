@@ -63,7 +63,7 @@ public class Stack implements IStack {
 
     @Override
     public void transferFrom(IStack stack) {
-        this.amount -= stack.getAmount();
+        this.amount += stack.getAmount();
         stack.setAmount(0);
     }
 

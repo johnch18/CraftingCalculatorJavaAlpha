@@ -12,7 +12,7 @@ public class StackFactory {
         int amount;
         double chance;
         //
-        amount = obj.optInt("amount", 1);
+        amount = obj.optInt("amount", 0);
         chance = obj.optDouble("chance", 1.0);
         switch (obj.optString("type", "null")) {
             default: {
