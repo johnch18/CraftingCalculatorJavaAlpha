@@ -1,7 +1,11 @@
 package com.johnch18.craftingcalculator;
 
-public interface IComponent {
+import java.util.List;
 
-    int getIdentifier();
+public interface IComponent extends ISerializable {
+
+    String getName();
+    int metadata();
+    List<IRecipe> getRecipes();
 
 }
