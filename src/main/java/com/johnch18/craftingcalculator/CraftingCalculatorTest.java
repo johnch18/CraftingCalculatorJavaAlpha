@@ -24,14 +24,17 @@ public class CraftingCalculatorTest {
     }
 
     public static void replTest() throws FileNotFoundException {
-        RecipeREPL repl = new RecipeREPL("test.json");
-        repl.repl();
     }
 
     public static void main(
             String[] args
     ) throws CCInvalidIngredientString, CCRecursionException, CCNullPtrException, IOException {
-        replTest();
+        if (args.length < 1) {
+            System.out.println("Please enter a json file to use. Make sure to backup just in case.");
+        } else {
+            RecipeREPL repl = new RecipeREPL(args[0]);
+            repl.repl();
+        }
     }
 
 }
